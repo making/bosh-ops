@@ -51,16 +51,16 @@ jobs:
       - name: Stop postgres
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
-          bosh stop --hard ${DEPLOYMENT_NAME}
+          bosh stop --hard -d ${DEPLOYMENT_NAME}
       - name: Stop p-healthwatch2-pas-exporter
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
-          bosh stop --hard ${DEPLOYMENT_NAME}
+          bosh stop --hard -d ${DEPLOYMENT_NAME}
       - name: Stop p-healthwatch2
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas'
-          bosh stop --hard ${DEPLOYMENT_NAME}
+          bosh stop --hard -d ${DEPLOYMENT_NAME}
       - name: Stop cf
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
-          bosh stop --hard ${DEPLOYMENT_NAME}
+          bosh stop --hard -d ${DEPLOYMENT_NAME}
