@@ -1,0 +1,49 @@
+name: Run BOSH Stop
+
+on:
+  workflow_dispatch: { }
+
+jobs:
+  bosh-cli-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Install BOSH CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          wget -q https://github.com/cloudfoundry/bosh-cli/releases/download/v7.6.1/bosh-cli-7.6.1-darwin-amd64
+          chmod +x bosh-cli-7.6.1-darwin-amd64
+          sudo mv bosh-cli-7.6.1-darwin-amd64 /usr/local/bin/bosh
+      - name: Import Secrets
+        id: secrets
+        uses: hashicorp/vault-action@v3.0.0
+        with:
+          exportToken: true
+          exportEnv: true
+          method: jwt
+          url: ${{ secrets.VAULT_ADDR }}
+          role: cicd
+          secrets: |
+            kv/data/cicd/bosh environment | BOSH_ENVIRONMENT ;
+            kv/data/cicd/bosh client | BOSH_CLIENT ;
+            kv/data/cicd/bosh client_secret | BOSH_CLIENT_SECRET ;
+            kv/data/cicd/bosh ca_cert | BOSH_CA_CERT ;   
+            kv/data/cicd/bosh all_proxy | BOSH_ALL_PROXY ;  
+            kv/data/cicd/bosh private_key | PRIVATE_KEY ;   
+      - name: Set up BOSH environment variables
+        run: |
+          cat <<EOF > /tmp/private_key.pem
+          ${PRIVATE_KEY}
+          EOF
+          chmod 600 /tmp/private_key.pem
+          mkdir -p ~/.ssh
+          cat <<EOF > ~/.ssh/config
+          host *
+            StrictHostKeyChecking no
+          EOF
+      - name: Run bosh vms
+        run: |
+          bosh -v
+          bosh vms
