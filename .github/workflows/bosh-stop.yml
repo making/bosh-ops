@@ -58,7 +58,7 @@ jobs:
           bosh stop --hard -d ${DEPLOYMENT_NAME} -n
       - name: Stop p-healthwatch2
         run: |
-          DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas'
+          DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
           bosh stop --hard -d ${DEPLOYMENT_NAME} -n
       - name: Stop cf
         run: |
