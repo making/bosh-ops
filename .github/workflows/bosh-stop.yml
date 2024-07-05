@@ -64,3 +64,7 @@ jobs:
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
           bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+      - name: Revoke token
+        if: always()
+        run: |
+          curl -X POST -s -H "X-Vault-Token: ${VAULT_TOKEN}" ${{ secrets.VAULT_ADDR }}/v1/auth/token/revoke-self || true
