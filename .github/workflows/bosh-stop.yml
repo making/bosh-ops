@@ -14,11 +14,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Install BOSH CLI
         run: |
-          sudo apt-get -q update
-          sudo apt-get install -yq jq
-          wget -q https://github.com/cloudfoundry/bosh-cli/releases/download/v7.6.1/bosh-cli-7.6.1-darwin-amd64
-          chmod +x bosh-cli-7.6.1-darwin-amd64
-          sudo mv bosh-cli-7.6.1-darwin-amd64 /usr/local/bin/bosh
+          wget -q https://github.com/cloudfoundry/bosh-cli/releases/download/v7.6.1/bosh-cli-7.6.1-linux-amd64
+          chmod +x bosh-cli-7.6.1-linux-amd64
+          sudo mv bosh-cli-7.6.1-linux-amd64 /usr/local/bin/bosh
+          bosh -v
       - name: Import Secrets
         id: secrets
         uses: hashicorp/vault-action@v3.0.0
