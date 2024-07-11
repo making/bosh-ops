@@ -2,7 +2,9 @@ name: Run BOSH Stop
 
 on:
   workflow_dispatch: { }
-
+  schedule:
+    # 22:00 JST on Fridays
+    - cron: '00 13 * * 5'
 jobs:
   bosh-stop:
     runs-on: ubuntu-latest
