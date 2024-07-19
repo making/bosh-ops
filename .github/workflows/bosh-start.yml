@@ -48,6 +48,11 @@ jobs:
       - name: Run bosh deployments
         run: |
           bosh deployments --json | jq -r '.Tables[0].Rows[].name' > deployments.txt
+      - name: Start service instances
+        run: |
+          for DEPLOYMENT_NAME in $(cat deployments.txt | grep -E '^service-instance'); do
+            bosh start -d ${DEPLOYMENT_NAME} -n;
+          done
       - name: Start cf
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
