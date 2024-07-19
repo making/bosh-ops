@@ -66,6 +66,11 @@ jobs:
         run: |
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
           bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+      - name: Stop service instances
+        run: |
+          for DEPLOYMENT_NAME in $(cat deployments.txt | grep -E '^service-instance'); do
+            bosh stop --hard -d ${DEPLOYMENT_NAME} -n;
+          done
       - name: Revoke token
         if: always()
         run: |
