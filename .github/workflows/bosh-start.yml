@@ -31,7 +31,7 @@ jobs:
             kv/data/cicd/bosh all_proxy | BOSH_ALL_PROXY ;  
             kv/data/cicd/bosh private_key | PRIVATE_KEY ;   
       - name: Set up BOSH environment variables
-        run: setup-ssh.sh
+        run: ./setup-ssh.sh
       - name: Run bosh deployments
         run: |
           bosh deployments --json | jq -r '.Tables[0].Rows[].name' > deployments.txt
