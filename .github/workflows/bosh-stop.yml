@@ -15,11 +15,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Install BOSH CLI
-        run: |
-          wget -q https://github.com/cloudfoundry/bosh-cli/releases/download/v7.6.1/bosh-cli-7.6.1-linux-amd64
-          chmod +x bosh-cli-7.6.1-linux-amd64
-          sudo mv bosh-cli-7.6.1-linux-amd64 /usr/local/bin/bosh
-          bosh -v
+        run: ./install-bosh.sh
       - name: Import Secrets
         id: secrets
         uses: hashicorp/vault-action@v3.0.0
@@ -37,39 +33,35 @@ jobs:
             kv/data/cicd/bosh all_proxy | BOSH_ALL_PROXY ;  
             kv/data/cicd/bosh private_key | PRIVATE_KEY ;   
       - name: Set up BOSH environment variables
-        run: |
-          cat <<EOF > /tmp/private_key.pem
-          ${PRIVATE_KEY}
-          EOF
-          chmod 600 /tmp/private_key.pem
-          mkdir -p ~/.ssh
-          cat <<EOF > ~/.ssh/config
-          host *
-            StrictHostKeyChecking no
-          EOF
+        run: setup-ssh.sh
       - name: Run bosh deployments
         run: |
           bosh deployments --json | jq -r '.Tables[0].Rows[].name' > deployments.txt
       - name: Stop postgres
         run: |
+          source retryable.sh
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
-          bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+          retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n
       - name: Stop p-healthwatch2-pas-exporter
         run: |
+          source retryable.sh
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
-          bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+          retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n
       - name: Stop p-healthwatch2
         run: |
+          source retryable.sh
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
-          bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+          retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n
       - name: Stop cf
         run: |
+          source retryable.sh
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
-          bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+          retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n
       - name: Stop service instances
         run: |
+          source retryable.sh
           for DEPLOYMENT_NAME in $(cat deployments.txt | grep -E '^service-instance'); do
-            bosh stop --hard -d ${DEPLOYMENT_NAME} -n;
+            retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n;
           done
       - name: Revoke token
         if: always()
