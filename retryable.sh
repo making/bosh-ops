@@ -1,7 +1,6 @@
 #!/bin/bash
-set +e
-
 retryable() {
+    set +e
     local retries=2
     local count=0
     local success=0
