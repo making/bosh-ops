@@ -1,4 +1,5 @@
 #!/bin/bash
+set +e
 
 retryable() {
     local retries=2
