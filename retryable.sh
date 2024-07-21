@@ -1,6 +1,5 @@
 #!/bin/bash
 retryable() {
-    set +e
     local retries=2
     local count=0
     local success=0
@@ -15,7 +14,9 @@ retryable() {
     fi
 
     while [[ $count -lt $retries ]]; do
+        set +e
         "$@"
+        set -e
         if [[ $? -eq 0 ]]; then
             success=1
             break
