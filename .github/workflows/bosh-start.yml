@@ -35,17 +35,17 @@ jobs:
       - name: Run bosh deployments
         run: |
           bosh deployments --json | jq -r '.Tables[0].Rows[].name' > deployments.txt
+      - name: Start cf
+        run: |
+          source retryable.sh
+          DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
+          retryable bosh start -d ${DEPLOYMENT_NAME} -n
       - name: Start service instances
         run: |
           source retryable.sh
           for DEPLOYMENT_NAME in $(cat deployments.txt | grep -E '^service-instance'); do
             retryable bosh start -d ${DEPLOYMENT_NAME} -n;
           done
-      - name: Start cf
-        run: |
-          source retryable.sh
-          DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
-          retryable bosh start -d ${DEPLOYMENT_NAME} -n
       - name: Start postgres
         run: |
           source retryable.sh
