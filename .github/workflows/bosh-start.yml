@@ -63,12 +63,12 @@ jobs:
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
         retryable bosh start -d ${DEPLOYMENT_NAME} -n
     - name: Google Chat Notification
+      if: always()
       uses: Co-qn/google-chat-notification@releases/v1
       with:
         name: BOSH Start
         url: ${{ env.WEBHOOK_URL }}
         status: ${{ job.status }}
-      if: always()
     - name: Revoke token
       if: always()
       run: |

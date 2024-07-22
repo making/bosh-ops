@@ -65,6 +65,7 @@ jobs:
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
         retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n
     - name: Google Chat Notification
+      if: always()
       uses: Co-qn/google-chat-notification@releases/v1
       with:
         name: BOSH Stop
