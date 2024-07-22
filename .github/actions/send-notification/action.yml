@@ -10,7 +10,7 @@ inputs:
     required: true
   run-name:
     description: 'Name of the run to include in the notification'
-    default: ${{ format('{1}', github.job) }}
+    default: ${{ format('{0}', github.job) }}
 runs:
   using: composite
   steps:
