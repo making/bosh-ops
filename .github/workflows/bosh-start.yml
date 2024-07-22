@@ -2,7 +2,9 @@ name: Run BOSH Start
 
 on:
   workflow_dispatch: { }
-
+  schedule:
+  # 7:30 JST on Weekdays
+  - cron: '30 22 * * 0-4'
 jobs:
   bosh-start:
     runs-on: ubuntu-latest
