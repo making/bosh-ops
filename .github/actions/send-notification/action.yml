@@ -10,7 +10,7 @@ inputs:
     required: true
   run-name:
     description: 'Name of the run to include in the notification'
-    default: ${{ format('{0} {1}', github.ref_name, github.job) }}
+    default: ${{ format('{1}', github.job) }}
 runs:
   using: composite
   steps:
@@ -20,12 +20,12 @@ runs:
   - shell: bash
     if: ${{ inputs.status == 'success' }}
     run: |
-      curl -X POST '${{ inputs.webhook-url }}' -H 'Content-Type: application/json' -d '{ text: "<${{ env.RUN_URL }}|${{ inputs.run-name }}> was successful"}' || true
+      curl -X POST '${{ inputs.webhook-url }}' -H 'Content-Type: application/json' -d '{ text: "✅ <${{ env.RUN_URL }}|${{ inputs.run-name }}> was successful"}' || true
   - shell: bash
     if: ${{ inputs.status == 'failure' }}
     run: |
-      curl -X POST '${{ inputs.webhook-url }}' -H 'Content-Type: application/json' -d '{ text: "<users/all> *<${{ env.RUN_URL }}|${{ inputs.run-name }}> failed*"}' || true
+      curl -X POST '${{ inputs.webhook-url }}' -H 'Content-Type: application/json' -d '{ text: "🚨 <${{ env.RUN_URL }}|${{ inputs.run-name }}> failed"}' || true
   - shell: bash
     if: ${{ inputs.status == 'cancelled' }}
     run: |
-      curl -X POST '${{ inputs.webhook-url }}' -H 'Content-Type: application/json' -d '{ text: "<${{ env.RUN_URL }}|${{ inputs.run-name }}> was cancelled"}' || true
+      curl -X POST '${{ inputs.webhook-url }}' -H 'Content-Type: application/json' -d '{ text: "⚠️ <${{ env.RUN_URL }}|${{ inputs.run-name }}> was cancelled"}' || true
