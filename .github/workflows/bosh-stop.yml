@@ -64,11 +64,11 @@ jobs:
         source retryable.sh
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^cf-')
         retryable bosh stop --hard -d ${DEPLOYMENT_NAME} -n
-    - name: Send Notification
-      uses: ./.github/actions/send-notification
-      if: always()
+    - name: Google Chat Notification
+      uses: Co-qn/google-chat-notification@releases/v1
       with:
-        webhook-url: ${{ env.WEBHOOK_URL }}
+        name: BOSH Stop
+        url: ${{ env.WEBHOOK_URL }}
         status: ${{ job.status }}
     - name: Revoke token
       if: always()

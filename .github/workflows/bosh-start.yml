@@ -62,12 +62,13 @@ jobs:
         source retryable.sh
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
         retryable bosh start -d ${DEPLOYMENT_NAME} -n
-    - name: Send Notification
-      uses: ./.github/actions/send-notification
-      if: always()
+    - name: Google Chat Notification
+      uses: Co-qn/google-chat-notification@releases/v1
       with:
-        webhook-url: ${{ env.WEBHOOK_URL }}
+        name: BOSH Start
+        url: ${{ env.WEBHOOK_URL }}
         status: ${{ job.status }}
+      if: always()
     - name: Revoke token
       if: always()
       run: |
