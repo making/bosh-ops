@@ -46,7 +46,7 @@ jobs:
           for DEPLOYMENT_NAME in $(cat deployments.txt | grep -E '^service-instance'); do
             retryable bosh start -d ${DEPLOYMENT_NAME} -n;
           done
-      - name: Start postgres
+      - name: Start postgres service broker
         run: |
           source retryable.sh
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')

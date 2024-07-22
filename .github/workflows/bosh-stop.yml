@@ -37,7 +37,7 @@ jobs:
       - name: Run bosh deployments
         run: |
           bosh deployments --json | jq -r '.Tables[0].Rows[].name' > deployments.txt
-      - name: Stop postgres
+      - name: Stop postgres service broker
         run: |
           source retryable.sh
           DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
