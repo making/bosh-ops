@@ -51,14 +51,14 @@ jobs:
       run: |
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
         bosh start -d ${DEPLOYMENT_NAME} -n
-    - name: Start p-healthwatch2
-      run: |
-        DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
-        bosh start -d ${DEPLOYMENT_NAME} -n
-    - name: Start p-healthwatch2-pas-exporter
-      run: |
-        DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
-        bosh start -d ${DEPLOYMENT_NAME} -n
+    #- name: Start p-healthwatch2
+    #  run: |
+    #    DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
+    #    bosh start -d ${DEPLOYMENT_NAME} -n
+    #- name: Start p-healthwatch2-pas-exporter
+    #  run: |
+    #    DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
+    #    bosh start -d ${DEPLOYMENT_NAME} -n
     - name: Google Chat Notification
       if: always()
       uses: Co-qn/google-chat-notification@releases/v1
