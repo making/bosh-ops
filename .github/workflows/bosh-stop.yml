@@ -42,14 +42,14 @@ jobs:
       run: |
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
         bosh stop --hard -d ${DEPLOYMENT_NAME} -n
-    - name: Stop p-healthwatch2-pas-exporter
-      run: |
-        DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
-        bosh stop --hard -d ${DEPLOYMENT_NAME} -n
-    - name: Stop p-healthwatch2
-      run: |
-        DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
-        bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+    # - name: Stop p-healthwatch2-pas-exporter
+    #   run: |
+    #     DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
+    #     bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+    # - name: Stop p-healthwatch2
+    #   run: |
+    #     DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
+    #     bosh stop --hard -d ${DEPLOYMENT_NAME} -n
     - name: Stop service instances
       run: |
         for DEPLOYMENT_NAME in $(cat deployments.txt | grep -E '^service-instance'); do
