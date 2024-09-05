@@ -42,6 +42,10 @@ jobs:
       run: |
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
         bosh stop --hard -d ${DEPLOYMENT_NAME} -n
+    - name: Stop hub-tas-collector
+      run: |
+        DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^hub-tas-collector')
+        bosh stop --hard -d ${DEPLOYMENT_NAME} -n
     # - name: Stop p-healthwatch2-pas-exporter
     #   run: |
     #     DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2-pas-exporter')
