@@ -51,6 +51,10 @@ jobs:
       run: |
         DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^postgres-')
         bosh start -d ${DEPLOYMENT_NAME} -n
+    - name: Start hub-tas-collector
+      run: |
+        DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^hub-tas-collector')
+        bosh start -d ${DEPLOYMENT_NAME} -n
     #- name: Start p-healthwatch2
     #  run: |
     #    DEPLOYMENT_NAME=$(cat deployments.txt | grep -E '^p-healthwatch2' | grep -Ev '^p-healthwatch2-pas')
