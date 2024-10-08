@@ -2,7 +2,7 @@ name: Run BOSH Stop
 
 on:
   workflow_dispatch: { }
-  schedule:
+  schedule: []
   # 18:00 JST on Weekdays
   # - cron: '00 9 * * 1-5'
 jobs:
